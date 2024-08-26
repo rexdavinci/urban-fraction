@@ -1,0 +1,45 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IFractional",
+  "sourceName": "contracts/Payment.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "homeId",
+          "type": "uint256"
+        }
+      ],
+      "name": "viewHome",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "totalQty",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "unitCost",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "sold",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "status",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

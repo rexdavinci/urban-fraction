@@ -1,0 +1,55 @@
+get http://localhost:8000
+
+###
+post http://localhost:8000/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123"
+}
+
+###
+get http://localhost:8000/things
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMSIsImlhdCI6MTcyMzg0NzA2M30.92LFlpfjxUorEePV_WLaSM_pq3FUAjIKIgdX5PBGuhQ
+
+###
+post http://localhost:8000
+Content-Type: application/json
+
+{
+  "id": 2,
+  "address": "30313 Marcelo Inlet Fixed",
+  "cost": 610000,
+  "units": 544
+}
+
+###
+get http://localhost:8000/all
+
+###
+get http://localhost:8000/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMSIsImlhdCI6MTcyMzg1MTE0OH0.94fI7GKoiefxYB5B7_m-zHPF_dnbmrw8n-Px_J9sAtQ
+
+
+###
+post http://localhost:8000/buy/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMSIsImlhdCI6MTcyMzg1MTE0OH0.94fI7GKoiefxYB5B7_m-zHPF_dnbmrw8n-Px_J9sAtQ
+Content-Type: application/json
+
+{
+  "amount": 200
+}
+
+###
+post http://localhost:8000/new-asset
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcyNDA5NzMyOH0.Gbbj7q1EH_jS6UIa546x4x6a9622mNzKOWbTpjHcXu4
+Content-Type: application/json
+
+{
+  "address": "585 Marley Meadow",
+  "cost": 780000,
+  "units": 100,
+  "unitCost": 18,
+  "minimumBuy": 8
+}
