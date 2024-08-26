@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import { useAssetStore } from "./store";
 import { useAPI } from "./hooks/useAPI";
 import dynamic from "next/dynamic";
+import { assets } from "./constants";
 
 const Modal = dynamic(() => import("./components/Modal"));
 export default function Home() {
   const [showModal, setModal] = useState({ open: false, action: "nil" });
   const [data, setData] = useState<any>({ units: 1 });
-  const { assets, setWatching, watching } = useAssetStore();
+  const { setWatching, watching } = useAssetStore();
   const router = useRouter();
 
   useAPI();
@@ -89,30 +90,30 @@ export default function Home() {
                   alt="visa-logo"
                   className="mx-auto"
                 />
-                <div className="flex justify-around">
+                <div className="flex justify-around mt-4">
                   <div className="text-center w-[45%] border border-black mt-5">
-                    <p className="">Name on card</p>
-                    <p className="border bg-white text-sm font-semibold">Avry Pavlik</p>
+                    <p className="">Name On Card</p>
+                    <p className="border bg-white text-lg font-semibold">Avry Pavlik</p>
                   </div>
                   <div className="text-center w-[45%] border border-black mt-5">
                     <p className="">PIN</p>
-                    <p className="border bg-white text-sm font-semibold">7020</p>
+                    <p className="border bg-white text-lg font-semibold">7020</p>
                   </div>
                 </div>
                 <div className="flex justify-around">
                   <div className="text-center w-[45%] border border-black mt-5">
                     <p className="">Expiration</p>
-                    <p className="border bg-white text-sm font-semibold">6/27</p>
+                    <p className="border bg-white text-lg font-semibold">6/27</p>
                   </div>
                   <div className="text-center w-[45%] border border-black mt-5">
                     <p className="">CCV</p>
-                    <p className="border bg-white text-sm font-semibold">810</p>
+                    <p className="border bg-white text-lg font-semibold">810</p>
                   </div>
                 </div>
                 <div className="flex justify-around">
-                <div className="text-center w-[45%] border border-black mt-5">
+                <div className="text-center w-[65%] border border-black mt-5">
                     <p className="">Car Number</p>
-                    <p className="border bg-white text-sm font-semibold">4756232599884126</p>
+                    <p className="border bg-white text-lg font-semibold">4756232599884126</p>
                   </div>
                 </div>
                 <div></div>
@@ -142,13 +143,13 @@ export default function Home() {
               <div className="mt-20 md:mt-10 mx-auto flex justify-between md:w-[350px] w-[380px]">
                 <div className="flex w-[100px] flex-col justify-center items-center">
                   <p className="font-semibold text-2xl">Assets</p>
-                  <p className="font-semibold text-lg">{assets.length}</p>
+                  <p className="font-semibold text-lg">{assets.assets.length}</p>
                 </div>
                 <div className="flex w-[100px] flex-col justify-center items-center">
                   <p className="font-semibold text-2xl">TVL</p>
                   <p className="font-semibold text-lg">
                     $
-                    {assets
+                    {assets.assets
                       .reduce(
                         (acc: any, curr: any) => acc + Number(curr.worth),
                         0
@@ -166,7 +167,7 @@ export default function Home() {
       </div>
       <div className="h-[500px] pt-8">
         <div className="w-[80%] mx-auto grid md:grid-cols-3 gap-10">
-          {assets.map((d: any) => {
+          {assets.assets.map((d: any) => {
             const minBuyCost = (d.unit_cost * d.minimum_buy).toFixed(4);
             return (
               <div
@@ -213,7 +214,10 @@ export default function Home() {
                   >
                     Buy
                   </button>
-                  <button className="w-[120px] border px-4 rounded hover:bg-gradient-to-tr hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white">
+                  <button onClick={() => {
+                    setWatching(d)
+                    router.push('/info')
+                  }} className="w-[120px] border px-4 rounded hover:bg-gradient-to-tr hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white">
                     More Info
                   </button>
                 </div>

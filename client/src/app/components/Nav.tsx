@@ -26,7 +26,7 @@ export default function Nav() {
             key={l.name}
             href={l.link}
             className="text-sm underline"
-            onClick={() => l.name === "Logout" && setAuth("")}
+            onClick={() => l.name === "Logout" && setAuth(undefined)}
           >
             <span className="capitalize">{l.name}</span>
           </Link>

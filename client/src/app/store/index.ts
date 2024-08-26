@@ -1,11 +1,14 @@
 import { create } from 'zustand'
 import { persist, devtools, createJSONStorage } from 'zustand/middleware'
 
+
+type IUser = { id: number; username: string; password: string, admin: boolean, bought: any; balance: number } | undefined
+
 interface AssetState {
-  auth: string;
+  auth: IUser;
   assets: any;
   watching: any;
-  setAuth: (token: string) => void
+  setAuth: (token: IUser) => void
   setAssets: (assets: any) => void
   setWatching: (watching: any) => void
 }
@@ -14,9 +17,9 @@ export const useAssetStore = create<AssetState>()(
   devtools(
     persist(
       (set) => ({
-        auth: '',
+        auth: undefined,
         assets: [],
-        watching: null,
+        watching: undefined,
         setAuth: (auth) => set(() => ({ auth })),
         setAssets: (assets) => set(() => ({ assets })),
         setWatching: (watching) => set(() => ({ watching })),

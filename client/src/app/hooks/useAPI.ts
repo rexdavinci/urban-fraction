@@ -1,39 +1,41 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useAssetStore } from '../store';
+import { users, assets } from '../constants';
 
 const useAPI = () => {
 
   const { setAssets, setAuth, auth } = useAssetStore()
 
-  const url = 'http://localhost:8000'
+  const addAsset = useCallback((data: { [x: string]: string }) => {
+    return {
+      id: assets.assets.length + 1,
+      name: data.name,
+      location: data.location,
+      worth: Number(data.worth),
+      units: Number(data.units),
+      unit_cost: Number(data.unit_cost),
+      minimum_buy: Number(data.minimum_buy),
+      sold: 0,
+      image: 'https://images.pexels.com/photos/87223/pexels-photo-87223.jpeg'
+    }
+    // console.log([...assets.assets, asset])
+    // setAssets([...assets.assets, asset])
 
-  const postAPI = useCallback(async (data: { [x: string]: string }, action: string) => {
-    const result = await fetch(`${url}/${action}`, {
-      body: JSON.stringify(data),
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${auth}`
-      },
-      credentials: action === 'assets/new' ? 'include' : 'omit',
-    });
-    const json = await result.json()
-    return json;
-  }, [auth])
-
-  const getAPI = useCallback(async (route: string) => {
-    const result = await fetch(`${url}/${route}`);
-    return await result.json();
   }, [])
 
-  useEffect(() => {
-    getAPI('assets/all').then((assets) => {
-      setAssets(assets)
-    })
+  const loginUser = useCallback((data: { [x: string]: string }) => {
+    const user = users.users.find(u => u.username === data.username && u.password === data.password)
+    setAuth(user)
   }, [])
 
-  return { postAPI, getAPI }
+  // useEffect(() => {
+  //   if(assets.assets.length === 0) {
+  //     setAssets(assets.assets)
+  //   }
+  // }, [])
+
+  return { loginUser, addAsset }
 }
 
 export { useAPI }

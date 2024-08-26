@@ -1,17 +1,22 @@
 "use client";
 import { useState } from "react";
 import { useAPI } from "../hooks/useAPI";
+import { useRouter } from "next/navigation";
 import { useAssetStore } from "../store";
+import { assets } from "../constants";
 
 export default function Asset() {
   const [data, setData] = useState<{ [x: string]: string }>({});
-  const { postAPI } = useAPI();
-  const { assets, setAssets } = useAssetStore();
-  const addAsset = async (e: any) => {
+  const router = useRouter();
+  const { addAsset } = useAPI();
+  const {setAssets} = useAssetStore()
+  const createAsset = (e: any) => {
     e.preventDefault();
-    const asset = await postAPI(data, "assets/new");
-    setAssets([...assets, asset]);
+    const asset = addAsset(data);
+    assets.add(asset)
+    router.push('/')
   };
+
 
   const inputs = [
     "name",
@@ -28,7 +33,7 @@ export default function Asset() {
     <div className="h-svh flex flex-col items-center justify-center">
       <div className="text-sm md:w-1/3 w-[70%]">
         <p className="text-center text-xl mb-3">New Asset</p>
-        <form onSubmit={addAsset} className="space-y-3">
+        <form onSubmit={createAsset} className="space-y-3">
           {inputs.map((i) => (
             <div key={i} className="flex justify-between items-center">
               <label className="capitalize">{i.replace("_", " ")}:</label>

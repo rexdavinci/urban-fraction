@@ -5,14 +5,12 @@ import { useAssetStore } from "../store";
 
 export default function Login() {
   const [data, setData] = useState<{ [x: string]: string }>({});
-  const { postAPI } = useAPI();
+  const { loginUser } = useAPI();
   const { setAuth } = useAssetStore();
 
-  const login = async (e: any) => {
+  const login = (e: any) => {
     e.preventDefault();
-
-    const auth = await postAPI(data, "login");
-    setAuth(auth.token);
+    loginUser(data);
   };
 
   const onChange = (value: string, name: string) =>
