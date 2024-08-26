@@ -21,7 +21,7 @@ const initAssets = [
     unit_cost: 1.1,
     minimum_buy: 3,
     image: 'https://images.pexels.com/photos/87223/pexels-photo-87223.jpeg',
-    sold: 0,
+    sold: 410,
   },
 ]
 

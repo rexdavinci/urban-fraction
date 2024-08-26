@@ -1,8 +1,13 @@
 "use client";
 import { useAssetStore } from "../store";
+import { useRouter } from "next/navigation";
 export default function Info() {
   const { watching } = useAssetStore();
-  console.log(watching);
+  const router = useRouter()
+  if(!watching) {
+    return router.replace('/')
+    
+  } 
   return (
     <div className="mt-6 h-svh">
       <div className="mt-20">
