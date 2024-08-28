@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist, devtools, createJSONStorage } from 'zustand/middleware'
 
 
-type IUser = { id: number; username: string; password: string, admin: boolean, bought: any[]; balance: number } | undefined
+type IUser = { id: number; username: string; password: string, admin: boolean, bought: any[]; balance: number; crypto: string; } | undefined
 
 interface AssetState {
   auth: IUser;

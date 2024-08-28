@@ -5,7 +5,7 @@ import { users, assets, trade } from '../constants';
 
 const useAPI = () => {
 
-  const { setAuth, auth } = useAssetStore()
+  const { setAuth, auth, watching, setAssets } = useAssetStore()
 
   const addAsset = useCallback((data: { [x: string]: string }) => {
     return {
@@ -27,15 +27,22 @@ const useAPI = () => {
     setAuth(user)
   }, [])
 
-  const buyAsset = useCallback((asset: number, units: number, user: number) => {
-    trade.buy(asset, units, user)
-
-    const updatedAuth = { ...auth, bought: [...auth!.bought, { asset, units }]}
-    setAuth(updatedAuth as any)
+  const buyAsset = useCallback((asset: number, units: number) => {
+    if (!auth) return alert('You must be connected to purchase')
+    const cost = watching.unit_cost * units
+    if (auth.balance < cost) return alert("Insufficient Funds")
+    const { user, assets: updatedAssets } = trade.buy(asset, units, auth.id, cost)
+    setAssets(updatedAssets)
+    setAuth(user)
 
   }, [])
 
-  return { loginUser, addAsset, buyAsset }
+  const updateProfile = useCallback((username: string, crypto: string) => {
+    const updatedUser = users.updateUser(auth!.id, username, crypto)
+    setAuth(updatedUser)
+  }, [setAuth, auth])
+
+  return { loginUser, addAsset, buyAsset, updateProfile }
 }
 
 export { useAPI }

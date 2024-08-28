@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAPI } from "../hooks/useAPI";
 import { useAssetStore } from "../store";
@@ -6,11 +7,13 @@ import { useAssetStore } from "../store";
 export default function Login() {
   const [data, setData] = useState<{ [x: string]: string }>({});
   const { loginUser } = useAPI();
-  const { setAuth } = useAssetStore();
+  const { auth } = useAssetStore();
+  const router = useRouter()
 
   const login = (e: any) => {
     e.preventDefault();
     loginUser(data);
+    router.push('/dashboard')
   };
 
   const onChange = (value: string, name: string) =>

@@ -74,10 +74,10 @@ class Asset {
 }
 
 
-const initUsers = [{ id: 1, username: 'user1', password: '123', admin: false, bought: [] as any, balance: 400 },
-{ id: 4, username: 'admin', password: '123', admin: true, bought: [] as any, balance: 15 },]
+const initUsers = [{ id: 1, username: 'user1', password: '123', admin: false, bought: [] as any, balance: 400, crypto: '' },
+{ id: 4, username: 'admin', password: '123', admin: true, bought: [] as any, balance: 15, crypto: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' },]
 
-type IUser = { id: number; username: string; password: string, admin: boolean, bought: any; balance: number }
+type IUser = { id: number; username: string; password: string, admin: boolean, bought: any; balance: number; crypto: string }
 class User {
   users = initUsers
 
@@ -99,13 +99,24 @@ class User {
     return this.users.find(u => u.id === id);
   }
 
-  buyAsset(id: number, units: number, asset: number) {
+  updateUser(id: number, username: string, crypto: string) {
+    this.users = this.users.map(u => {
+      if(u.id !== id) {
+        return u
+      }
+      return {...u, username, crypto }
+    })
+    return this.users.find(u => u.id === id);
+  }
+
+  buyAsset(id: number, units: number, asset: number, cost: number) {
     this.users = this.users.map(u => {
       if (id === u.id) {
-        return { ...u, bought: [...u.bought, { asset, units }] }
+        return { ...u, bought: [...u.bought, { asset, units, time: Date.now() }], balance: u.balance - cost }
       }
       return u
     })
+    return this.users.find(u => u.id === id)
   }
 }
 
@@ -114,10 +125,9 @@ export const users = new User();
 
 class Trade {
 
-  buy(assetId: number, amount: number, userId: number) {
-    const asset = assets.buy(assetId, amount)
-    users.buyAsset(userId, amount, asset!.id)
-    return users.users.find(u => u.id === userId)
+  buy(assetId: number, units: number, user: number, cost: number) {
+    const asset = assets.buy(assetId, units)
+    return { user: users.buyAsset(user, units, asset!.id, cost), assets: assets.assets }
   }
 
 }
