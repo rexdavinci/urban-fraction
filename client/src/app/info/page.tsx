@@ -20,23 +20,29 @@ export default function Info() {
           {watching.name}
         </p>
 
-        <div className="flex justify-around flex-wrap w-[75%] mx-auto">
-          <div className="text-center md:w-[20%] w-[40%] border border-black mt-5">
+        <div className="flex justify-around flex-wrap w-[75%] mx-auto space-x-1">
+          <div className="text-center md:w-[25%] w-[40%] border border-black mt-5">
             <p className="">Total Worth</p>
             <p className="border bg-white text-lg font-semibold">
               {watching.worth}
             </p>
           </div>
-          <div className="text-center md:w-[20%] border  w-[40%] border-black mt-5">
+          <div className="text-center md:w-[25%] border  w-[40%] border-black mt-5">
             <p className="">Fracts Generated</p>
             <p className="border bg-white text-lg font-semibold">
               {watching.units}
             </p>
           </div>
-          <div className="text-center md:w-[20%] border  w-[40%] border-black mt-5">
+          <div className="text-center md:w-[25%] border  w-[40%] border-black mt-5">
             <p className="">Fracts Sold</p>
             <p className="border bg-white text-lg font-semibold">
               {watching.sold}
+            </p>
+          </div>
+          <div className="text-center md:w-[25%] border  w-[40%] border-black mt-5">
+            <p className="">Rent Per Month</p>
+            <p className="border bg-white text-lg font-semibold">
+              CA$ {watching.monthly_rent.toFixed(2).toLocaleString('en', 'US')}
             </p>
           </div>
           <div className="text-center md:w-[20%] border  w-[40%] border-black mt-5">

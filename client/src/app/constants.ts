@@ -8,6 +8,7 @@ type IAsset = {
   minimum_buy: number,
   sold: number,
   image: string;
+  monthly_rent: number;
 }
 
 
@@ -22,6 +23,19 @@ const initAssets = [
     minimum_buy: 3,
     image: 'https://images.pexels.com/photos/87223/pexels-photo-87223.jpeg',
     sold: 410,
+    monthly_rent: 3000
+  },
+  {
+    name: "Great Place in Town",
+    id: 2,
+    location: '1231 Mellie Bun Crescent',
+    worth: 750000,
+    units: 200,
+    unit_cost: 5,
+    minimum_buy: 10,
+    image: 'https://images.pexels.com/photos/87223/pexels-photo-87223.jpeg',
+    sold: 150,
+    monthly_rent: 5000
   },
 ]
 
@@ -37,6 +51,25 @@ class Asset {
   add(asset: IAsset) {
     const item = { ...asset, sold: 0 }
     this.assets.push(item);
+  }
+
+  find(assetId: number) {
+    return this.assets.find(a => a.id === assetId)
+  }
+
+  findAll(ids: number[]) {
+    return this.assets.filter(a => ids.includes(a.id))
+  }
+
+  buy(id: number, amount: number) {
+    this.assets = this.assets.map(a => {
+      if (id === a.id) {
+        return { ...a, sold: a.sold + amount }
+      }
+      return a
+    })
+
+    return this.assets.find(a => a.id === id);
   }
 }
 
@@ -66,10 +99,10 @@ class User {
     return this.users.find(u => u.id === id);
   }
 
-  buys(id: number, bought: any) {
+  buyAsset(id: number, units: number, asset: number) {
     this.users = this.users.map(u => {
-      if (u.id === id) {
-        return { ...u, bought: [...u.bought, bought] }
+      if (id === u.id) {
+        return { ...u, bought: [...u.bought, { asset, units }] }
       }
       return u
     })
@@ -81,8 +114,10 @@ export const users = new User();
 
 class Trade {
 
-  sell() {
-
+  buy(assetId: number, amount: number, userId: number) {
+    const asset = assets.buy(assetId, amount)
+    users.buyAsset(userId, amount, asset!.id)
+    return users.users.find(u => u.id === userId)
   }
 
 }

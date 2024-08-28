@@ -25,6 +25,7 @@ export default function Asset() {
     "units",
     "unit_cost",
     "minimum_buy",
+    "monthly_rent",
   ];
 
   const onChange = (value: string, name: string) =>

@@ -11,10 +11,15 @@ const Modal = dynamic(() => import("./components/Modal"));
 export default function Home() {
   const [showModal, setModal] = useState({ open: false, action: "nil" });
   const [data, setData] = useState<any>({ units: 1 });
-  const { setWatching, watching } = useAssetStore();
+  const { setWatching, watching, auth } = useAssetStore();
+  const { buyAsset } = useAPI();
   const router = useRouter();
 
-  useAPI();
+  const buy = () => {
+    if (auth && Number(data.units) !== 0) {
+      buyAsset(watching.id, Number(data.units), auth.id);
+    }
+  };
 
   return (
     <main className="">
@@ -28,47 +33,58 @@ export default function Home() {
                   <small className="block">{watching.location}</small>
                 </p>
                 <img src={watching.image} alt="" className="rounded" />
-
-                <div>
-                  <form>
-                    <div className="flex items-center justify-center my-3">
-                      <label className="mr-2">Units</label>
-                      <input
-                        id="units"
-                        onChange={(e) =>
-                          setData({ [e.target.id]: e.target.value })
-                        }
-                        min={watching.minimum_buy}
-                        defaultValue={watching.unit_cost}
-                        className="border items-center px-2 text-sm py-1 rounded"
-                        type="number"
-                        placeholder="how much units?"
-                      />
-                      <small className="ml-2">
-                        $
-                        {(
-                          Number(watching.unit_cost) * Number(data.units)
-                        ).toFixed(4)}
-                      </small>
-                    </div>
-                  </form>
-                </div>
-                {/* <p className="text-center mt-4">Payment Options</p> */}
+                <form>
+                  <div className="flex items-center justify-center my-3">
+                    <label className="mr-2">Units</label>
+                    <input
+                      id="units"
+                      onChange={(e) =>
+                        setData({ [e.target.id]: Number(e.target.value) })
+                      }
+                      min={watching.minimum_buy}
+                      defaultValue={watching.unit_cost}
+                      className="border items-center px-2 text-sm py-1 rounded"
+                      type="number"
+                      placeholder="how much units?"
+                    />
+                    <small className="ml-2">
+                      CA${" "}
+                      {(
+                        Number(watching.unit_cost) * Number(data.units)
+                      ).toFixed(2)}
+                    </small>
+                  </div>
+                </form>
                 <div className="grid gap-2 grid-cols-2 grid-flow-col">
                   <button
+                    disabled={watching.units === watching.sold}
                     onClick={() => setModal({ action: "card", open: true })}
-                    className="bg-red-700 text-white rounded py-1 h-[65px]"
+                    className={` ${
+                      watching.units === watching.sold
+                        ? "bg-gray-500"
+                        : "bg-red-700"
+                    }  text-white rounded py-1 h-[65px] `}
                   >
                     Pay With Card
                   </button>
-                  <button className="bg-blue-700 text-white rounded py-1">
+                  <button
+                    disabled={watching.units === watching.sold}
+                    className={` ${
+                      watching.units === watching.sold
+                        ? "bg-gray-500"
+                        : "bg-red-700"
+                    }  text-white rounded py-1 h-[65px] `}
+                  >
                     Pay With Crypto
                   </button>
                 </div>
               </div>
               <div className="absolute bottom-0 w-full px-4 flex justify-between mb-2">
                 <button
-                  onClick={() => setModal({ action: "nil", open: false })}
+                  onClick={() => {
+                    setModal({ action: "nil", open: false });
+                    setData({ units: 1 });
+                  }}
                   className="font-semibold bg-blue-500 text-white w-[120px] hover:bg-blue-500/90 rounded py-1"
                 >
                   Cancel
@@ -93,17 +109,23 @@ export default function Home() {
                 <div className="flex justify-around mt-4">
                   <div className="text-center w-[45%] border border-black mt-5">
                     <p className="">Name On Card</p>
-                    <p className="border bg-white text-lg font-semibold">Avry Pavlik</p>
+                    <p className="border bg-white text-lg font-semibold">
+                      Avry Pavlik
+                    </p>
                   </div>
                   <div className="text-center w-[45%] border border-black mt-5">
                     <p className="">PIN</p>
-                    <p className="border bg-white text-lg font-semibold">7020</p>
+                    <p className="border bg-white text-lg font-semibold">
+                      7020
+                    </p>
                   </div>
                 </div>
                 <div className="flex justify-around">
                   <div className="text-center w-[45%] border border-black mt-5">
                     <p className="">Expiration</p>
-                    <p className="border bg-white text-lg font-semibold">6/27</p>
+                    <p className="border bg-white text-lg font-semibold">
+                      6/27
+                    </p>
                   </div>
                   <div className="text-center w-[45%] border border-black mt-5">
                     <p className="">CCV</p>
@@ -111,21 +133,29 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex justify-around">
-                <div className="text-center w-[65%] border border-black mt-5">
+                  <div className="text-center w-[65%] border border-black mt-5">
                     <p className="">Car Number</p>
-                    <p className="border bg-white text-lg font-semibold">4756232599884126</p>
+                    <p className="border bg-white text-lg font-semibold">
+                      4756232599884126
+                    </p>
                   </div>
                 </div>
                 <div></div>
               </div>
               <div className="absolute bottom-0 w-full px-4 flex justify-between mb-2">
                 <button
-                  onClick={() => setModal({ action: "nil", open: false })}
+                  onClick={() => {
+                    setData({ units: 1 });
+                    setModal({ action: "nil", open: false });
+                  }}
                   className="font-semibold bg-blue-500 text-white w-[120px] hover:bg-blue-500/90 rounded py-1"
                 >
                   Cancel
                 </button>
-                <button onClick={() => setModal({ open: false, action: 'nil' })} className="font-semibold bg-blue-500 text-white w-[120px] hover:bg-blue-500/90 rounded py-1">
+                <button
+                  onClick={buy}
+                  className="font-semibold bg-blue-500 text-white w-[120px] hover:bg-blue-500/90 rounded py-1"
+                >
                   Confirm
                 </button>
               </div>
@@ -143,7 +173,9 @@ export default function Home() {
               <div className="mt-20 md:mt-10 mx-auto flex justify-between md:w-[350px] w-[380px]">
                 <div className="flex w-[100px] flex-col justify-center items-center">
                   <p className="font-semibold text-2xl">Assets</p>
-                  <p className="font-semibold text-lg">{assets.assets.length}</p>
+                  <p className="font-semibold text-lg">
+                    {assets.assets.length}
+                  </p>
                 </div>
                 <div className="flex w-[100px] flex-col justify-center items-center">
                   <p className="font-semibold text-2xl">TVL</p>
@@ -166,13 +198,13 @@ export default function Home() {
         </div>
       </div>
       <div className="h-[500px] pt-8">
-        <div className="w-[80%] mx-auto grid md:grid-cols-3 gap-10">
+        <div className="w-[80%] md:w-[75%] flex justify-between flex-wrap mx-auto">
           {assets.assets.map((d: any) => {
             const minBuyCost = (d.unit_cost * d.minimum_buy).toFixed(4);
             return (
               <div
                 key={d.id}
-                className="p-2 bg-white rounded-lg h-[450px] relative w-[320px]"
+                className="p-2 bg-white rounded-lg h-[450px] relative w-[320px] m-5"
               >
                 <img src={d.image} alt="image" className="rounded-xl" />
                 <div className="mt-5 text-[14px]">
@@ -214,10 +246,13 @@ export default function Home() {
                   >
                     Buy
                   </button>
-                  <button onClick={() => {
-                    setWatching(d)
-                    router.push('/info')
-                  }} className="w-[120px] border px-4 rounded hover:bg-gradient-to-tr hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white">
+                  <button
+                    onClick={() => {
+                      setWatching(d);
+                      router.push("/info");
+                    }}
+                    className="w-[120px] border px-4 rounded hover:bg-gradient-to-tr hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white"
+                  >
                     More Info
                   </button>
                 </div>

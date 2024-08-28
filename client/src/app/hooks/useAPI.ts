@@ -1,11 +1,11 @@
 'use client';
 import { useCallback, useEffect } from 'react'
 import { useAssetStore } from '../store';
-import { users, assets } from '../constants';
+import { users, assets, trade } from '../constants';
 
 const useAPI = () => {
 
-  const { setAssets, setAuth, auth } = useAssetStore()
+  const { setAuth, auth } = useAssetStore()
 
   const addAsset = useCallback((data: { [x: string]: string }) => {
     return {
@@ -16,12 +16,10 @@ const useAPI = () => {
       units: Number(data.units),
       unit_cost: Number(data.unit_cost),
       minimum_buy: Number(data.minimum_buy),
+      monthly_rent: Number(data.monthly_rent),
       sold: 0,
       image: 'https://images.pexels.com/photos/87223/pexels-photo-87223.jpeg'
     }
-    // console.log([...assets.assets, asset])
-    // setAssets([...assets.assets, asset])
-
   }, [])
 
   const loginUser = useCallback((data: { [x: string]: string }) => {
@@ -29,22 +27,15 @@ const useAPI = () => {
     setAuth(user)
   }, [])
 
-  // useEffect(() => {
-  //   if(assets.assets.length === 0) {
-  //     setAssets(assets.assets)
-  //   }
-  // }, [])
+  const buyAsset = useCallback((asset: number, units: number, user: number) => {
+    trade.buy(asset, units, user)
 
-  return { loginUser, addAsset }
+    const updatedAuth = { ...auth, bought: [...auth!.bought, { asset, units }]}
+    setAuth(updatedAuth as any)
+
+  }, [])
+
+  return { loginUser, addAsset, buyAsset }
 }
 
 export { useAPI }
-
-// {
-//   "address": "585 Marley Meadow",
-//   "cost": 780000,
-//   "units": 100,
-//   "unitCost": 18,
-//   "minimumBuy": 8
-//   "image": "location"
-// }
