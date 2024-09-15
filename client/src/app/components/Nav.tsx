@@ -16,7 +16,9 @@ export default function Nav() {
   const isAuth = () =>
     auth?.username
       ? links.filter((l) => l.name !== "Login" && l.name !== "Register")
-      : links.filter((l) => l.name !== "Logout")
+      : links.filter(
+          (l) => l.name !== "Logout" && !auth?.admin && l.name !== "Add Asset"
+        );
 
   return (
     <nav className="space-x-2 capitalize px-5 bg-white fixed top-0 w-full z-10 flex justify-between py-2">
@@ -29,12 +31,14 @@ export default function Nav() {
               className="text-sm underline mr-2"
               onClick={() => l.name === "Logout" && setAuth(undefined)}
             >
-              <span className="capitalize">{l.name}</span>
+              <span className="">{l.name}</span>
             </Link>
           );
         })}
       </div>
-      <Link href="/dashboard" className="font-semibold">{auth?.username}</Link>
+      <Link href="/dashboard" className="font-semibold">
+        {auth?.username}
+      </Link>
     </nav>
   );
 }

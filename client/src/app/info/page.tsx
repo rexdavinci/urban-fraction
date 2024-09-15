@@ -3,11 +3,10 @@ import { useAssetStore } from "../store";
 import { useRouter } from "next/navigation";
 export default function Info() {
   const { watching } = useAssetStore();
-  const router = useRouter()
-  if(!watching) {
-    return router.replace('/')
-    
-  } 
+  const router = useRouter();
+  if (!watching) {
+    return router.replace("/");
+  }
   return (
     <div className="mt-6 h-svh">
       <div className="mt-20">
@@ -42,15 +41,20 @@ export default function Info() {
           <div className="text-center md:w-[25%] border  w-[40%] border-black mt-5">
             <p className="">Rent Per Month</p>
             <p className="border bg-white text-lg font-semibold">
-              CA$ {watching.monthly_rent.toFixed(2).toLocaleString('en', 'US')}
+              CA$ {watching.monthly_rent.toFixed(2).toLocaleString("en", "US")}
             </p>
           </div>
           <div className="text-center md:w-[20%] border  w-[40%] border-black mt-5">
             <p className="">Status</p>
             <p className="border bg-white text-lg font-semibold">
-              {watching.sold !== watching.units ? 'OPEN' : 'CLOSED'}
+              {watching.sold !== watching.units ? "OPEN" : "CLOSED"}
             </p>
           </div>
+        </div>
+        <div className="h-[30px] w-[150px] mx-auto flex justify-center">
+          <button className="hover:bg-blue-500 border-white bg-blue-500/90 px-2 w-full h-full rounded text-white">
+            Buy
+          </button>
         </div>
       </div>
     </div>

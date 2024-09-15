@@ -6,7 +6,6 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useAssetStore } from "../store";
 import { useAPI } from "../hooks/useAPI";
-import { assets } from "../constants";
 
 const Modal = dynamic(() => import("@/app/components/Modal"));
 
@@ -15,7 +14,7 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState({ open: true, action: "nil" });
   const [data, setData] = useState<any>({});
   const router = useRouter();
-  const { updateProfile } = useAPI();
+  const { updateProfile, assets } = useAPI();
 
   if (!auth) return router.replace("/");
 
@@ -28,8 +27,6 @@ export default function Dashboard() {
   const getAsset = (asset: number) => {
     return assets.find(asset);
   };
-
-  console.log(auth.bought)
 
   return (
     <div className="md:p-20 py-20 px-5">
@@ -89,15 +86,21 @@ export default function Dashboard() {
         ) : null)}
       <div className="flex flex-col md:flex-row items-center">
         <div className="flex items-center">
-          <div className="md:w-[80px] md:h-[80px] h-[50px] w-[50px] bg-teal-500 rounded-full"></div>
+          <div className="md:w-[80px] md:h-[80px] h-[50px] w-[50px] bg-gradient-to-br via-blue-500 via-40% from-teal-500 to-orange-500 rounded-full"></div>
           <div className="ml-4">
-            <p>
+            <p className="text-sm`">
               <span className="font-semibold">Username: </span>
-              {auth.username}{" "}
+              <span className="">{auth.username}</span>
             </p>
-            <p>
-              <span className="font-semibold">Crypto Address: </span>
-              {!auth.crypto ? "<not set>" : auth.crypto}
+            <p className="text-sm">
+              <span className="font-semibold text-sm">Crypto Address: </span>
+              {!auth.crypto ? (
+                "<not set>"
+              ) : (
+                <span className="">
+                  {auth.crypto.slice(0, 6)}...{auth.crypto.slice(36)}
+                </span>
+              )}
             </p>
             <button
               onClick={() => {
@@ -110,9 +113,14 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="md:ml-20 mt-5 md:mt-0">
-          <p>
+          <p className="text-sm">
             Current Balance:{" "}
-            <span className="font-semibold">CA$ {auth.balance} </span>
+            <span className="font-semibold">
+              {auth.balance.toLocaleString("en-US", {
+                style: "currency",
+                currency: "CAD",
+              })}{" "}
+            </span>
             <button
               onClick={() => {
                 setShowModal({ open: true, action: "update" });
@@ -139,12 +147,10 @@ export default function Dashboard() {
             return (
               <div key={b.time}>
                 <div className="p-2 bg-white rounded-lg h-[450px] relative w-[320px] m-5">
-                <p className="py-2 text-[20px] text-center">
-                  <span className="font-semibold">{asset!.name}</span>
-                  <small className="block">
-                    {asset!.location}{" "}
-                  </small>
-                </p>
+                  <p className="py-2 text-[20px] text-center">
+                    <span className="font-semibold">{asset!.name}</span>
+                    <small className="block">{asset!.location} </small>
+                  </p>
                   <img
                     src={asset!.image}
                     alt="image"
@@ -171,42 +177,40 @@ export default function Dashboard() {
                         {asset!.units} units
                       </p>
                       <p>
-                        <span className="font-semibold">
-                          Currently Owned
-                        </span>
-                        : {b.units} ({b.units/asset!.units})
+                        <span className="font-semibold">Currently Owned</span>:{" "}
+                        {b.units} ({b.units / asset!.units})
                       </p>
                     </div>
                   </div>
                   <div className="bottom-0 absolute mb-3 flex justify-between w-[95%] mx-auto">
-                  <button
-                    onClick={() => {
-                      setWatching(asset);
-                      setShowModal({ open: true, action: "buy" });
-                    }}
-                    className="text-sm w-[80px] border px-2 rounded hover:bg-gradient-to-bl hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white"
-                  >
-                    Buy More
-                  </button>
-                  <button
-                    onClick={() => {
-                      setWatching(asset);
-                      setShowModal({ open: true, action: "redeem" });
-                    }}
-                    className="text-sm w-[80px] border px-2 rounded hover:bg-gradient-to-bl hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white"
-                  >
-                    Redeem
-                  </button>
-                  <button
-                    onClick={() => {
-                      setWatching(asset);
-                      router.push("/info");
-                    }}
-                    className="text-sm w-[80px] border px-2 rounded hover:bg-gradient-to-tr hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white"
-                  >
-                    More Info
-                  </button>
-                </div>
+                    <button
+                      onClick={() => {
+                        setWatching(asset);
+                        setShowModal({ open: true, action: "buy" });
+                      }}
+                      className="text-sm w-[80px] border px-2 rounded hover:bg-gradient-to-bl hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white"
+                    >
+                      Buy More
+                    </button>
+                    <button
+                      onClick={() => {
+                        setWatching(asset);
+                        setShowModal({ open: true, action: "redeem" });
+                      }}
+                      className="text-sm w-[80px] border px-2 rounded hover:bg-gradient-to-bl hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white"
+                    >
+                      Redeem
+                    </button>
+                    <button
+                      onClick={() => {
+                        setWatching(asset);
+                        router.push("/info");
+                      }}
+                      className="text-sm w-[80px] border px-2 rounded hover:bg-gradient-to-tr hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white"
+                    >
+                      More Info
+                    </button>
+                  </div>
                 </div>
               </div>
             );

@@ -1,4 +1,4 @@
-
+import { memo } from "react"
 function Modal({ children }: { children: any }) {
   return (
     <div className="w-lvw h-lvh bg-black/90 fixed top-0 z-[900] left-0">

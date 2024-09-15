@@ -68,14 +68,13 @@ class Asset {
       }
       return a
     })
-
     return this.assets.find(a => a.id === id);
   }
 }
 
 
-const initUsers = [{ id: 1, username: 'user1', password: '123', admin: false, bought: [] as any, balance: 400, crypto: '' },
-{ id: 4, username: 'admin', password: '123', admin: true, bought: [] as any, balance: 15, crypto: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' },]
+const initUsers = [{ id: 1, username: 'user', password: '123', admin: false, bought: [] as any, balance: 400, crypto: '' },
+{ id: 4, username: 'admin', password: '123', admin: true, bought: [] as any, balance: 10000, crypto: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266' },]
 
 type IUser = { id: number; username: string; password: string, admin: boolean, bought: any; balance: number; crypto: string }
 class User {
@@ -101,10 +100,10 @@ class User {
 
   updateUser(id: number, username: string, crypto: string) {
     this.users = this.users.map(u => {
-      if(u.id !== id) {
+      if (u.id !== id) {
         return u
       }
-      return {...u, username, crypto }
+      return { ...u, username, crypto }
     })
     return this.users.find(u => u.id === id);
   }
@@ -120,19 +119,23 @@ class User {
   }
 }
 
-export const assets = new Asset();
-export const users = new User();
-
 class Trade {
-
-  buy(assetId: number, units: number, user: number, cost: number) {
-    const asset = assets.buy(assetId, units)
-    return { user: users.buyAsset(user, units, asset!.id, cost), assets: assets.assets }
+  assets
+  users
+  constructor(assets: Asset, users: User) {
+    this.assets = assets;
+    this.users = users;
   }
-
+  buy(assetId: number, units: number, user: number, cost: number) {
+    const asset = this.assets.buy(assetId, units)
+    return { user: this.users.buyAsset(user, units, asset!.id, cost), assets: this.assets.assets }
+  }
 }
 
-export const trade = new Trade();
+export const makeCurrencySpace = (curr: string) => curr.replace("CA$", "CA$ ") 
+
+
+export { Trade, Asset, User }
 
 
 

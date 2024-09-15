@@ -14,8 +14,8 @@ interface AssetState {
 }
 
 export const useAssetStore = create<AssetState>()(
-  devtools(
-    persist(
+  // devtools(
+    // persist(
       (set) => ({
         auth: undefined,
         assets: [],
@@ -24,11 +24,11 @@ export const useAssetStore = create<AssetState>()(
         setAssets: (assets) => set(() => ({ assets })),
         setWatching: (watching) => set(() => ({ watching })),
       }),
-      {
-        name: 'asset-store', // name of the item in the storage (must be unique)
-        storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
-      },
-    ),
-  ),
+      // {
+        // name: 'asset-store', // name of the item in the storage (must be unique)
+        // storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
+      // },
+    // ),
+  // ),
 )
 
