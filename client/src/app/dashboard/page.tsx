@@ -1,22 +1,29 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
-
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useAssetStore } from "../store";
 import { useAPI } from "../hooks/useAPI";
+import {
+  FaWallet,
+  FaChartLine,
+  FaCube,
+  FaMapMarkerAlt,
+  FaCoins,
+  FaUsers,
+  FaArrowUp,
+  FaArrowRight,
+  FaChartPie,
+} from "react-icons/fa";
 
 const Modal = dynamic(() => import("@/app/components/Modal"));
 
 export default function Dashboard() {
   const { auth, setWatching } = useAssetStore();
-  const [showModal, setShowModal] = useState({ open: true, action: "nil" });
+  const [showModal, setShowModal] = useState({ open: false, action: "nil" });
   const [data, setData] = useState<any>({});
   const router = useRouter();
   const { updateProfile, assets } = useAPI();
-
-  if (!auth) return router.replace("/");
 
   const updateAccount = () => {
     updateProfile(data.username, data.crypto);
@@ -24,198 +31,333 @@ export default function Dashboard() {
     setShowModal({ open: false, action: "nil" });
   };
 
-  const getAsset = (asset: number) => {
-    return assets.find(asset);
+  // Helper to retrieve an asset from the assets list by its ID.
+  const getAsset = (assetId: number) => {
+    return assets.find((asset: any) => asset.id === assetId);
   };
 
   return (
-    <div className="md:p-20 py-20 px-5">
-      {showModal.open &&
-        (showModal.action === "update" ? (
-          <Modal>
-            <div className="bg-white/90 w-[400px] h-[250px] rounded-lg relative">
-              <div className="w-[80%] mx-auto">
-                <p className="py-2 text-[20px] text-center">
-                  {/* <span className="font-semibold">{watching.name}</span>
-                  <small className="block">{watching.location} {watching.units === watching.sold && <span className="animate-pulse text-red-500 font-semibold">(SOLD OUT)</span>}</small> */}
-                </p>
-                {/* <img src={watching.image} alt="" className="rounded" /> */}
-                <div>
-                  <div className="flex flex-col my-5">
-                    <label className="mr-2">Crypto Address</label>
-                    <input
-                      id="crypto"
-                      onChange={(e) =>
-                        setData({ ...data, [e.target.id]: e.target.value })
-                      }
-                      className="border items-center px-2 text-sm py-2 rounded-lg"
-                      placeholder="Update Wallet Address"
-                    />
-                  </div>
-                  <div className="flex flex-col my-5">
-                    <label className="mr-2">Username</label>
-                    <input
-                      id="username"
-                      onChange={(e) =>
-                        setData({ ...data, [e.target.id]: e.target.value })
-                      }
-                      className="border items-center px-2 text-sm py-2 rounded-lg"
-                      placeholder="Change Username"
-                    />
+    <div className="min-h-screen bg-[#0A0B0F] pt-20 pb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <header className="mb-10">
+          <h1 className="text-3xl font-bold">
+            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              Dashboard
+            </span>
+          </h1>
+        </header>
+
+        {/* Portfolio Summary & My Investments */}
+        <section className="grid lg:grid-cols-3 gap-6 mb-10">
+          {/* Portfolio Summary */}
+          <div className="bg-gray-900/50 p-6 rounded-xl border border-purple-500/20">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-white text-xl font-medium">
+                Portfolio Summary
+              </h2>
+              <FaChartPie className="text-purple-400 text-xl" />
+            </div>
+            <div className="space-y-4">
+              <div className="bg-black/40 p-4 rounded-xl hover:bg-black/50 transition-colors">
+                <div className="flex items-center justify-between">
+                  <p className="text-gray-400 text-sm flex items-center gap-2">
+                    <FaWallet className="text-purple-400" />
+                    Total Investment
+                  </p>
+                  <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full">
+                    Active
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-white mt-2">$125,000</p>
+              </div>
+              <div className="bg-black/40 p-4 rounded-xl hover:bg-black/50 transition-colors">
+                <div className="flex items-center justify-between">
+                  <p className="text-gray-400 text-sm flex items-center gap-2">
+                    <FaChartLine className="text-cyan-400" />
+                    Current Value
+                  </p>
+                  <span className="text-xs bg-cyan-500/20 text-cyan-400 px-2 py-1 rounded-full">
+                    Growing
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-white mt-2">$142,500</p>
+              </div>
+              <div className="bg-black/40 p-4 rounded-xl hover:bg-black/50 transition-colors">
+                <div className="flex items-center justify-between">
+                  <p className="text-gray-400 text-sm flex items-center gap-2">
+                    <FaArrowUp className="text-green-400" />
+                    Total Return
+                  </p>
+                  <div className="flex items-center gap-1 text-green-400">
+                    <FaArrowUp className="text-sm" />
+                    <span className="text-xs">Past Month</span>
                   </div>
                 </div>
+                <p className="text-2xl font-bold text-green-400 mt-2">+14%</p>
               </div>
-              <div className="absolute bottom-0 w-full px-4 flex justify-between mb-5">
-                <button
-                  onClick={() => {
-                    setShowModal({ action: "nil", open: false });
-                  }}
-                  className="font-semibold bg-blue-500 text-white w-[120px] hover:bg-blue-500/90 rounded py-1"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={updateAccount}
-                  className="font-semibold bg-blue-500 text-white w-[120px] hover:bg-blue-500/90 rounded py-1"
-                >
-                  Confirm
+              <div className="bg-black/40 p-4 rounded-xl hover:bg-black/50 transition-colors">
+                <div className="flex items-center justify-between">
+                  <p className="text-gray-400 text-sm flex items-center gap-2">
+                    <FaCoins className="text-yellow-400" />
+                    Available for Withdrawal
+                  </p>
+                  <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full">
+                    Ready
+                  </span>
+                </div>
+                <p className="text-2xl font-bold text-white mt-2">$2,500</p>
+                <button className="mt-3 w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg text-white hover:opacity-90 transition-all flex items-center justify-center gap-2">
+                  <FaArrowRight className="text-sm" />
+                  Withdraw Funds
                 </button>
               </div>
             </div>
-          </Modal>
-        ) : null)}
-      <div className="flex flex-col md:flex-row items-center">
-        <div className="flex items-center">
-          <div className="md:w-[80px] md:h-[80px] h-[50px] w-[50px] bg-gradient-to-br via-blue-500 via-40% from-teal-500 to-orange-500 rounded-full"></div>
-          <div className="ml-4">
-            <p className="text-sm`">
-              <span className="font-semibold">Username: </span>
-              <span className="">{auth.username}</span>
-            </p>
-            <p className="text-sm">
-              <span className="font-semibold text-sm">Crypto Address: </span>
-              {!auth.crypto ? (
-                "<not set>"
-              ) : (
-                <span className="">
-                  {auth.crypto.slice(0, 6)}...{auth.crypto.slice(36)}
-                </span>
-              )}
-            </p>
-            <button
-              onClick={() => {
-                setShowModal({ open: true, action: "update" });
-              }}
-              className="underline text-xs"
-            >
-              Update
-            </button>
           </div>
-        </div>
-        <div className="md:ml-20 mt-5 md:mt-0">
-          <p className="text-sm">
-            Current Balance:{" "}
-            <span className="font-semibold">
-              {auth.balance.toLocaleString("en-US", {
-                style: "currency",
-                currency: "CAD",
-              })}{" "}
-            </span>
-            <button
-              onClick={() => {
-                setShowModal({ open: true, action: "update" });
+
+          {/* My Investments */}
+          <div className="lg:col-span-2 bg-gray-900/50 p-6 rounded-xl border border-purple-500/20">
+            <h2 className="text-white text-xl font-medium mb-4">
+              My Investments
+            </h2>
+            <div
+              className="space-y-4 h-[450px] overflow-y-scroll py-4"
+              id="propertiesContainer"
+              onScroll={(e) => {
+                const container = e.currentTarget;
+                const isScrollable =
+                  container.scrollHeight > container.clientHeight;
+                const hasReachedBottom =
+                  container.scrollHeight - container.scrollTop ===
+                  container.clientHeight;
+                const scrollIndicator =
+                  document.getElementById("scrollIndicator");
+
+                if (scrollIndicator) {
+                  scrollIndicator.style.display =
+                    isScrollable && !hasReachedBottom ? "flex" : "none";
+                }
               }}
-              className="underline text-xs ml-2"
             >
-              Top up
-            </button>
-            <button
-              onClick={() => {
-                setShowModal({ open: true, action: "update" });
-              }}
-              className="underline text-xs ml-2"
-            >
-              Withdraw
-            </button>
-          </p>
-        </div>
-      </div>
-      <div className="mx-auto w-[90%] md:w-full">
-        {auth.bought.length > 0 &&
-          auth.bought.map((b) => {
-            const asset = getAsset(b.asset);
-            return (
-              <div key={b.time}>
-                <div className="p-2 bg-white rounded-lg h-[450px] relative w-[320px] m-5">
-                  <p className="py-2 text-[20px] text-center">
-                    <span className="font-semibold">{asset!.name}</span>
-                    <small className="block">{asset!.location} </small>
-                  </p>
-                  <img
-                    src={asset!.image}
-                    alt="image"
-                    className="rounded-xl w-[150px] h-[150px] mx-auto"
-                  />
-                  <div className="px-3 mt-3">
-                    <div className="my-1">
-                      <p>
-                        <span className="font-semibold">Worth</span>: $
-                        {asset!.worth.toLocaleString("en-US")}
-                      </p>
+              {myInvestments && myInvestments.length > 0 ? (
+                myInvestments.map((property) => (
+                  <div
+                    key={property.id}
+                    className="bg-black/40 p-4 rounded-xl flex justify-between items-center"
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <FaCube className="text-purple-400" />
+                        <p className="text-white font-medium">
+                          {property.name}
+                        </p>
+                      </div>
+                      <div className="mt-2 grid grid-cols-2 gap-4">
+                        <div className="flex items-center gap-2">
+                          <FaMapMarkerAlt className="text-gray-400" />
+                          <p className="text-gray-400 text-sm">
+                            {property.location}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <FaCoins className="text-purple-400" />
+                          <p className="text-gray-400 text-sm">
+                            NFT Units: {property.units}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <FaChartLine className="text-green-400" />
+                          <p className="text-purple-400 text-sm">
+                            Yield: {property.rentalYield}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <FaUsers className="text-blue-400" />
+                          <p className="text-gray-400 text-sm">
+                            Occupancy: {property.occupancyRate}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <p>
-                        <span className="font-semibold">Fract Cost</span>: $
-                        {asset!.unit_cost.toFixed(2)} / fract
+                    <div className="text-right ml-4">
+                      <p className="text-white font-medium">
+                        ${property.value.toLocaleString()}
                       </p>
-                      <p>
-                        <span className="font-semibold">Minimum Buy</span>:{" "}
-                        {asset!.minimum_buy} units
+                      <p className="text-green-400 text-sm flex items-center justify-end gap-1">
+                        <FaArrowUp />
+                        {property.growth}%
                       </p>
-                      <p>
-                        <span className="font-semibold">Total Fracts</span>:{" "}
-                        {asset!.units} units
-                      </p>
-                      <p>
-                        <span className="font-semibold">Currently Owned</span>:{" "}
-                        {b.units} ({b.units / asset!.units})
+                      <p className="text-purple-400 text-sm">
+                        ${property.monthlyRevenue}/month
                       </p>
                     </div>
                   </div>
-                  <div className="bottom-0 absolute mb-3 flex justify-between w-[95%] mx-auto">
-                    <button
-                      onClick={() => {
-                        setWatching(asset);
-                        setShowModal({ open: true, action: "buy" });
-                      }}
-                      className="text-sm w-[80px] border px-2 rounded hover:bg-gradient-to-bl hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white"
-                    >
-                      Buy More
-                    </button>
-                    <button
-                      onClick={() => {
-                        setWatching(asset);
-                        setShowModal({ open: true, action: "redeem" });
-                      }}
-                      className="text-sm w-[80px] border px-2 rounded hover:bg-gradient-to-bl hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white"
-                    >
-                      Redeem
-                    </button>
-                    <button
-                      onClick={() => {
-                        setWatching(asset);
-                        router.push("/info");
-                      }}
-                      className="text-sm w-[80px] border px-2 rounded hover:bg-gradient-to-tr hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white"
-                    >
-                      More Info
-                    </button>
-                  </div>
-                </div>
+                ))
+              ) : (
+                <p className="text-gray-400">You have no investments yet</p>
+              )}
+            </div>
+            <div
+              id="scrollIndicator"
+              className="mt-2 flex justify-center"
+              style={{ display: "none" }}
+            >
+              <div className="text-gray-400 flex items-center gap-2">
+                <span>Scroll for more</span>
+                <FaArrowUp className="rotate-180" />
               </div>
-            );
-          })}
+            </div>
+          </div>
+        </section>
+
+        {/* Available Properties Section */}
+        <section className="bg-gray-900/50 p-6 rounded-xl border border-purple-500/20">
+          <h2 className="text-white text-xl font-medium mb-4">
+            Available Properties
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {assets?.map((asset: any) => (
+              <div key={asset.id} className="bg-black/40 p-4 rounded-xl">
+                <h3 className="text-white font-medium">{asset.name}</h3>
+                <p className="text-gray-400 text-sm mb-2">{asset.location}</p>
+                <p className="text-white font-bold">
+                  ${asset.worth?.toLocaleString()}
+                </p>
+                <p className="text-green-400 text-sm mb-3">
+                  Expected Return: {asset.expectedReturn}%
+                </p>
+                <button
+                  onClick={() => {
+                    setWatching(asset);
+                    setShowModal({ open: true, action: "buy" });
+                  }}
+                  className="w-full py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+                >
+                  Invest Now
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+        
       </div>
+
+      {/* Modal for Investment Actions */}
+      {showModal.open && showModal.action === "buy" && (
+        <Modal>
+          <div className="bg-white rounded-xl shadow-xl w-[90%] max-w-md mx-auto my-20 p-6 relative">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+              Invest in Property
+            </h2>
+            <p className="text-gray-600 text-center mb-6">
+              Confirm your investment or learn more details about the property.
+            </p>
+            {/* Optional form elements can be added here */}
+            <div className="flex justify-between">
+              <button
+                onClick={() => setShowModal({ action: "nil", open: false })}
+                className="w-[45%] py-2 bg-gray-300 text-gray-800 font-semibold rounded hover:bg-gray-400 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  // Handle the investment confirmation here
+                  setShowModal({ action: "nil", open: false });
+                }}
+                className="w-[45%] py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 transition"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+          {/* Overlay */}
+          <div
+            onClick={() => setShowModal({ action: "nil", open: false })}
+            className="fixed inset-0 bg-black opacity-50"
+          />
+        </Modal>
+      )}
     </div>
   );
 }
+
+export const myInvestments = [
+  {
+    id: 1,
+    name: "Luxury Beachfront Villa",
+    location: "Miami, FL",
+    units: 5,
+    rentalYield: "8.2%",
+    value: 42000,
+    growth: 5.2,
+    occupancyRate: "95%",
+    monthlyRevenue: 3200,
+  },
+  {
+    id: 2,
+    name: "Downtown Penthouse",
+    location: "New York, NY",
+    units: 3,
+    rentalYield: "7.5%",
+    value: 68000,
+    growth: 4.8,
+    occupancyRate: "92%",
+    monthlyRevenue: 4500,
+  },
+  {
+    id: 3,
+    name: "Modern Tech Hub Office",
+    location: "San Francisco, CA",
+    units: 2,
+    rentalYield: "9.1%",
+    value: 85000,
+    growth: 6.3,
+    occupancyRate: "98%",
+    monthlyRevenue: 6200,
+  },
+  {
+    id: 4,
+    name: "Suburban Family Home",
+    location: "Los Angeles, CA",
+    units: 4,
+    rentalYield: "7.8%",
+    value: 55000,
+    growth: 5.0,
+    occupancyRate: "93%",
+    monthlyRevenue: 3800,
+  },
+  {
+    id: 5,
+    name: "Urban Loft",
+    location: "Chicago, IL",
+    units: 3,
+    rentalYield: "8.0%",
+    value: 47000,
+    growth: 5.5,
+    occupancyRate: "90%",
+    monthlyRevenue: 3500,
+  },
+  {
+    id: 6,
+    name: "Luxury Mountain Resort",
+    location: "Aspen, CO",
+    units: 6,
+    rentalYield: "10.2%",
+    value: 92000,
+    growth: 6.8,
+    occupancyRate: "97%",
+    monthlyRevenue: 8100,
+  },
+  {
+    id: 7,
+    name: "Riverside Cottage",
+    location: "Austin, TX",
+    units: 2,
+    rentalYield: "7.3%",
+    value: 39000,
+    growth: 4.5,
+    occupancyRate: "88%",
+    monthlyRevenue: 2900,
+  },
+];

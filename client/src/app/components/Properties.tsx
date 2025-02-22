@@ -4,6 +4,7 @@ import { useState, memo } from "react";
 import { useRouter } from "next/navigation";
 import { useAssetStore } from "@/app/store";
 import { useAPI } from "@/app/hooks/useAPI";
+import { FaMapMarkerAlt, FaShoppingCart, FaInfoCircle } from "react-icons/fa";
 import BuyModal from "./BuyModal";
 import CreditCard from "./CreditCard";
 import { makeCurrencySpace } from "../constants";
@@ -24,102 +25,77 @@ function Properties() {
   };
 
   return (
-    <div className="h-[550px] pt-5">
-      {showModal.open ? (
-        showModal.action === "buy" ? (
-          <BuyModal
-            setData={setData}
-            data={data}
-            setShowModal={setShowModal}
-            // watching={watching}
-          />
-        ) : showModal.action === "card" ? (
-          <CreditCard buy={buy} setShowModal={setShowModal} setData={setData} />
-        ) : null
-      ) : null}
-
-      <div className="w-[80%] md:w-[75%] flex justify-between flex-wrap mx-auto">
-        {assets.map((d: any) => {
-          const minBuyCost = (d.unit_cost * d.minimum_buy).toLocaleString(
-            "en-US",
-            { style: "currency", currency: "CAD" }
-          );
-          return (
-            <div
-              key={d.id}
-              className="p-2 bg-white rounded-lg h-[450px] relative w-[320px] m-5"
-            >
-              <img src={d.image} alt="image" className="rounded-xl" />
-              <div className="mt-5 text-[14px]">
-                <p className="my-2 font-bold text-xl">{d.name}</p>
-                <p className="">{d.location}</p>
-                <div className="my-1">
-                  <p>
-                    <span className="font-semibold">Worth</span>:{" "}
-                    {makeCurrencySpace(
-                      d.worth.toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "CAD",
-                      })
-                    )}
-                  </p>
-                </div>
-                <div className="space-y-1">
-                  <p>
-                    <span className="font-semibold">Fract Cost</span>:{" "}
-                    {makeCurrencySpace(
-                      d.unit_cost.toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "CAD",
-                      })
-                    )}{" "}
-                    / fract
-                  </p>
-                  <p>
-                    <span className="font-semibold">Minimum Buy</span>:{" "}
-                    {d.minimum_buy} units - {makeCurrencySpace(minBuyCost)}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Total Fracts</span>:{" "}
-                    {d.units} units
-                  </p>
-                  <p>
-                    <span className="font-semibold">Total / Sold Fracts</span>:{" "}
-                    {d.units} / {d.sold}
-                  </p>
-                </div>
-              </div>
-              <div className="bottom-0 absolute mb-3 flex justify-between w-[95%] mx-auto">
-                <button
-                  disabled={!auth}
-                  onClick={() => {
-                    setWatching(d);
-                    setShowModal({ open: true, action: "buy" });
-                  }}
-                  className={`${
-                    !auth
-                      ? "hover:bg-gray-600 hover:text-white"
-                      : "hover:bg-gradient-to-bl hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white"
-                  } w-[120px] border px-4 rounded`}
-                >
-                  Buy
-                </button>
-                <button
-                  onClick={() => {
-                    setWatching(d);
-                    router.push("/info");
-                  }}
-                  className="w-[120px] border px-4 rounded hover:bg-gradient-to-tr hover:from-teal-500/20 via-50% hover:to-blue-500 hover:text-white"
-                >
-                  More Info
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {assets.map((property: any) => (
+        <Property key={property.id} property={property} />
+      ))}
     </div>
   );
 }
 
 export default Properties;
+
+interface IProperty {
+  id: string;
+  name: string;
+  location: string;
+  image: string;
+  worth: number;
+  unit_cost: number;
+  minimum_buy: number;
+  monthly_rent: number;
+  units: number;
+  sold: number;
+  on_sale: boolean;
+}
+
+const Property = ({ property }: { property: IProperty }) => {
+  return (
+    <div className="bg-gray-900/50 rounded-xl overflow-hidden border border-purple-500/20 transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:-translate-y-1">
+      <div className="h-48 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 relative">
+        <img
+          src={property.image}
+          alt={property.name}
+          className="w-full h-full object-cover"
+        />
+      </div>
+      <div className="p-6">
+        <h3 className="text-white text-xl font-medium mb-2">{property.name}</h3>
+        <div className="flex items-center gap-2 mb-4">
+          <FaMapMarkerAlt className="text-purple-400" />
+          <p className="text-gray-400">{property.location}</p>
+        </div>
+        <div className="flex flex-col gap-3">
+          <div className="flex justify-between items-center">
+            <span className="text-purple-400">
+              ${property.worth} Total Worth
+            </span>
+            <div className="flex flex-col items-end">
+              <span className="text-cyan-400">{property.sold} Units Sold</span>
+              <span className="text-gray-400 text-sm">
+                {property.units - property.sold} Units Available
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 text-sm text-gray-400 my-2">
+            <div>Unit Cost: ${property.unit_cost}</div>
+            <div>Min. Buy: {property.minimum_buy} units</div>
+            <div>Monthly Rent: ${property.monthly_rent}</div>
+            <div>{property.on_sale ? "On Sale" : "Not for Sale"}</div>
+          </div>
+
+          <div className="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
+            <div
+              className="bg-gradient-to-r from-purple-500 to-cyan-500 h-full rounded-full"
+              style={{ width: `${(property.sold / property.units) * 100}%` }}
+            />
+          </div>
+          <button className="px-4 py-2 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg text-white hover:opacity-90 transition-opacity">
+            View Details
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
