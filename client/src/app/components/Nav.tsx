@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useAssetStore } from "../store";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function Nav() {
   const links = [

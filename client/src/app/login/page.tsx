@@ -1,27 +1,28 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useAPI } from "../hooks/useAPI";
-import { useAssetStore } from "../store";
+// import { useRouter } from "next/navigation";
+// import { useState } from "react";
+// import { useAPI } from "../hooks/useAPI";
+// import { useAssetStore } from "../store";
 
 export default function Login() {
-  const [data, setData] = useState<{ [x: string]: string }>({});
-  const { loginUser } = useAPI();
-  const { auth } = useAssetStore();
-  const router = useRouter();
+  // const [data, setData] = useState<{ [x: string]: string }>({});
+  // const { loginUser } = useAPI();
+  // const { auth } = useAssetStore();
+  // const router = useRouter();
 
-  const login = async (e: any) => {
-  //   e.preventDefault();
-  //   await userLogin(data as { username: string; password: string })
-  //   // loginUser(data);
-  //   router.push("/dashboard");
-  };
+  // const login = async (e: any) => {
+  // //   e.preventDefault();
+  // //   await userLogin(data as { username: string; password: string })
+  // //   // loginUser(data);
+  // //   router.push("/dashboard");
+  // };
 
-  const onChange = (value: string, name: string) =>
-    setData({ ...data, [name]: value });
+  // const onChange = (value: string, name: string) =>
+  //   setData({ ...data, [name]: value });
 
   return (
     <div className="h-svh flex flex-col items-center justify-center">
+      <p>Login</p>
       {/* <div className="text-sm md:w-[25%] w-[70%]">
         <p className="text-center text-xl font-semibold mb-3">Login</p>
         <form onSubmit={login} className="space-y-3">

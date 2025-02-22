@@ -15,6 +15,7 @@ import {
   FaArrowRight,
   FaChartPie,
 } from "react-icons/fa";
+import { myInvestments } from "../constants";
 
 const Modal = dynamic(() => import("@/app/components/Modal"));
 
@@ -22,7 +23,7 @@ export default function Dashboard() {
   const { auth, setWatching } = useAssetStore();
   const [showModal, setShowModal] = useState({ open: false, action: "nil" });
   const [data, setData] = useState<any>({});
-  const router = useRouter();
+  // const router = useRouter();
   const { updateProfile, assets } = useAPI();
 
   const updateAccount = () => {
@@ -281,83 +282,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-export const myInvestments = [
-  {
-    id: 1,
-    name: "Luxury Beachfront Villa",
-    location: "Miami, FL",
-    units: 5,
-    rentalYield: "8.2%",
-    value: 42000,
-    growth: 5.2,
-    occupancyRate: "95%",
-    monthlyRevenue: 3200,
-  },
-  {
-    id: 2,
-    name: "Downtown Penthouse",
-    location: "New York, NY",
-    units: 3,
-    rentalYield: "7.5%",
-    value: 68000,
-    growth: 4.8,
-    occupancyRate: "92%",
-    monthlyRevenue: 4500,
-  },
-  {
-    id: 3,
-    name: "Modern Tech Hub Office",
-    location: "San Francisco, CA",
-    units: 2,
-    rentalYield: "9.1%",
-    value: 85000,
-    growth: 6.3,
-    occupancyRate: "98%",
-    monthlyRevenue: 6200,
-  },
-  {
-    id: 4,
-    name: "Suburban Family Home",
-    location: "Los Angeles, CA",
-    units: 4,
-    rentalYield: "7.8%",
-    value: 55000,
-    growth: 5.0,
-    occupancyRate: "93%",
-    monthlyRevenue: 3800,
-  },
-  {
-    id: 5,
-    name: "Urban Loft",
-    location: "Chicago, IL",
-    units: 3,
-    rentalYield: "8.0%",
-    value: 47000,
-    growth: 5.5,
-    occupancyRate: "90%",
-    monthlyRevenue: 3500,
-  },
-  {
-    id: 6,
-    name: "Luxury Mountain Resort",
-    location: "Aspen, CO",
-    units: 6,
-    rentalYield: "10.2%",
-    value: 92000,
-    growth: 6.8,
-    occupancyRate: "97%",
-    monthlyRevenue: 8100,
-  },
-  {
-    id: 7,
-    name: "Riverside Cottage",
-    location: "Austin, TX",
-    units: 2,
-    rentalYield: "7.3%",
-    value: 39000,
-    growth: 4.5,
-    occupancyRate: "88%",
-    monthlyRevenue: 2900,
-  },
-];

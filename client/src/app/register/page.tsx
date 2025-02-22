@@ -1,19 +1,20 @@
 "use client";
-import { useState } from "react";
+// import { useState } from "react";
 // import { useAPI } from "../hooks/useAPI";
 export default function Register() {
-  const [data, setData] = useState<{ [x: string]: string }>({});
-  // const { authUser } = useAPI();
-  const register = async (e: any) => {
-    e.preventDefault();
-  };
+  // const [data, setData] = useState<{ [x: string]: string }>({});
+  // // const { authUser } = useAPI();
+  // const register = async (e: any) => {
+  //   e.preventDefault();
+  // };
 
-  const onChange = (value: string, name: string) =>
-    setData({ ...data, [name]: value });
+  // const onChange = (value: string, name: string) =>
+  //   setData({ ...data, [name]: value });
 
   return (
     <div className="h-svh flex flex-col items-center justify-center">
-      <div className="text-sm md:w-[25%] w-[70%]">
+      <p>Register</p>
+      {/* <div className="text-sm md:w-[25%] w-[70%]">
         <p className="text-center text-xl font-semibold mb-3">Register</p>
         <form onSubmit={register} className="space-y-3">
           <div className="">
@@ -42,7 +43,7 @@ export default function Register() {
             </button>
           </div>
         </form>
-      </div>
+      </div> */}
     </div>
   );
 }

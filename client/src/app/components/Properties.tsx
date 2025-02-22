@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useState, memo } from "react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { useAssetStore } from "@/app/store";
 import { useAPI } from "@/app/hooks/useAPI";
 import { FaMapMarkerAlt, FaShoppingCart, FaInfoCircle } from "react-icons/fa";
@@ -14,7 +14,7 @@ function Properties() {
   const { setWatching, watching, auth, assets } = useAssetStore();
   const [data, setData] = useState<any>({ units: watching?.minimum_buy });
   const { buyAsset } = useAPI();
-  const router = useRouter();
+  // const router = useRouter();
 
   const buy = () => {
     if (!auth) return alert("You must log in first");
