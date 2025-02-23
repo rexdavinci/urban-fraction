@@ -2,27 +2,28 @@
 "use client";
 import { useState, memo } from "react";
 // import { useRouter } from "next/navigation";
-import { useAssetStore } from "@/app/store";
-import { useAPI } from "@/app/hooks/useAPI";
+// import { useAssetStore } from "@/app/store";
+// import { useAPI } from "@/app/hooks/useAPI";
 import { FaMapMarkerAlt, FaShoppingCart, FaInfoCircle } from "react-icons/fa";
-import BuyModal from "./BuyModal";
-import CreditCard from "./CreditCard";
-import { makeCurrencySpace } from "../constants";
-
+// import BuyModal from "./BuyModal";
+// import CreditCard from "./CreditCard";
+// import { makeCurrencySpace } from "../constants";
+import { initAssets } from "../constants";
 function Properties() {
-  const [showModal, setShowModal] = useState({ open: false, action: "nil" });
-  const { setWatching, watching, auth, assets } = useAssetStore();
-  const [data, setData] = useState<any>({ units: watching?.minimum_buy });
-  const { buyAsset } = useAPI();
+  const [assets, setAssets] = useState(initAssets || []);
+  // const [showModal, setShowModal] = useState({ open: false, action: "nil" });
+  // const { watching, auth } = useAssetStore();
+  // const [data, setData] = useState<any>({ units: watching?.minimum_buy });
+  // const { buyAsset } = useAPI();
   // const router = useRouter();
 
-  const buy = () => {
-    if (!auth) return alert("You must log in first");
-    if (Number(data.units) !== 0) {
-      buyAsset(watching.id, Number(data.units));
-      setShowModal({ open: false, action: "nil" });
-    }
-  };
+  // const buy = () => {
+  //   if (!auth) return alert("You must log in first");
+  //   if (Number(data.units) !== 0) {
+  //     buyAsset(watching.id, Number(data.units));
+  //     setShowModal({ open: false, action: "nil" });
+  //   }
+  // };
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

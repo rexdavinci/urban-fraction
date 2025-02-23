@@ -8,7 +8,7 @@ interface AssetState {
   auth: IUser;
   assets: any;
   watching: any;
-  setAuth: (token: IUser) => void
+  setAuth: (user: IUser) => void
   setAssets: (assets: any) => void
   setWatching: (watching: any) => void
 }

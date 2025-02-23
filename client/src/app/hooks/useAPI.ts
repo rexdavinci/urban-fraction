@@ -1,10 +1,7 @@
 'use client';
 import { useCallback, useMemo } from 'react'
 import { useAssetStore } from '../store';
-import { Trade, User, Asset } from '../constants';
-
-
-const uri = 'http://localhost:8000'
+import { User, Asset } from '../constants';
 
 const useAPI = () => {
   const { setAuth, auth, watching, setAssets, assets } = useAssetStore()

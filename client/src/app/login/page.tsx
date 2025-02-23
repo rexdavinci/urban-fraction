@@ -1,10 +1,20 @@
 "use client";
+import { useState } from "react";
+import { MdEmail } from "react-icons/md";
+import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
+import { RiLockPasswordLine } from "react-icons/ri";
 // import { useRouter } from "next/navigation";
 // import { useState } from "react";
 // import { useAPI } from "../hooks/useAPI";
 // import { useAssetStore } from "../store";
 
 export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
   // const [data, setData] = useState<{ [x: string]: string }>({});
   // const { loginUser } = useAPI();
   // const { auth } = useAssetStore();
@@ -20,39 +30,76 @@ export default function Login() {
   // const onChange = (value: string, name: string) =>
   //   setData({ ...data, [name]: value });
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle signup logic here
+    console.log("Form submitted:", formData);
+  };
+
   return (
-    <div className="h-svh flex flex-col items-center justify-center">
-      <p>Login</p>
-      {/* <div className="text-sm md:w-[25%] w-[70%]">
-        <p className="text-center text-xl font-semibold mb-3">Login</p>
-        <form onSubmit={login} className="space-y-3">
-          <div className="">
-            <label className="block text-lg">Username</label>
+    <div className="min-h-screen flex items-center justify-center bg-[#0A0B0F]">
+      <div className="bg-gray-900/50 p-8 rounded-xl border border-purple-500/20 w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center mb-6">
+          <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            Login
+          </span>
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="relative">
             <input
-              id="username"
-              onChange={(e) => onChange(e.target.value, e.target.id)}
-              className="border border-blue-800 rounded p-2 w-full"
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full bg-gray-900/50 border border-purple-500/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 pl-10"
+              required
             />
+            <MdEmail className="absolute left-3 top-3.5 text-gray-400" />
           </div>
-          <div className="">
-            <label className="block text-lg">Password</label>
+          <div className="relative">
             <input
-              id="password"
-              type="password"
-              onChange={(e) => onChange(e.target.value, e.target.id)}
-              className="border border-blue-800 rounded p-2 w-full"
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full bg-gray-900/50 border border-purple-500/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 pl-10"
+              required
             />
-          </div>
-          <div className="flex justify-center mt-4">
+            <RiLockPasswordLine className="absolute left-3 top-3.5 text-gray-400" />
             <button
-              type="submit"
-              className="bg-green-900 text-white w-[120px] rounded py-2 mx-auto"
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-300"
             >
-              Submit
+              {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
             </button>
           </div>
+          <button
+            type="submit"
+            className="w-full py-3 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg text-white font-semibold hover:opacity-90 transition-all duration-300"
+          >
+            Login
+          </button>
+          <p className="text-center text-gray-400 text-sm">
+            {`Don't have an account?`}{" "}
+            <a
+              href="/register"
+              className="text-purple-400 hover:text-purple-300"
+            >
+              Sign Up
+            </a>
+          </p>
         </form>
-      </div> */}
+      </div>
     </div>
   );
 }

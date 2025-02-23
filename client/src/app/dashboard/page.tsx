@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useAssetStore } from "../store";
@@ -15,7 +15,7 @@ import {
   FaArrowRight,
   FaChartPie,
 } from "react-icons/fa";
-import { myInvestments } from "../constants";
+import { initAssets, myInvestments } from "../constants";
 
 const Modal = dynamic(() => import("@/app/components/Modal"));
 
@@ -24,21 +24,21 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState({ open: false, action: "nil" });
   const [data, setData] = useState<any>({});
   // const router = useRouter();
-  const { updateProfile, assets } = useAPI();
+  // const { updateProfile, assets } = useAPI();
 
-  const updateAccount = () => {
-    updateProfile(data.username, data.crypto);
-    setData({});
-    setShowModal({ open: false, action: "nil" });
-  };
+  // const updateAccount = () => {
+  //   updateProfile(data.username, data.crypto);
+  //   setData({});
+  //   setShowModal({ open: false, action: "nil" });
+  // };
 
   // Helper to retrieve an asset from the assets list by its ID.
-  const getAsset = (assetId: number) => {
-    return assets.find((asset: any) => asset.id === assetId);
-  };
+  // const getAsset = (assetId: number) => {
+  //   return assets.find((asset: any) => asset.id === assetId);
+  // };
 
   return (
-    <div className="min-h-screen bg-[#0A0B0F] pt-20 pb-10">
+    <div className="min-h-screen border-5 border-red-500 bg-[#0A0B0F] pt-20 pb-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <header className="mb-10">
@@ -50,7 +50,8 @@ export default function Dashboard() {
         </header>
 
         {/* Portfolio Summary & My Investments */}
-        <section className="grid lg:grid-cols-3 gap-6 mb-10">
+        {/* <section className="grid lg:grid-cols-3 gap-4 px-2 sm:px-4 sm:gap-6 mb-10"> */}
+        <section className="grid lg:grid-cols-3 gap-4 px-2 sm:px-4 sm:gap-6 mb-10">
           {/* Portfolio Summary */}
           <div className="bg-gray-900/50 p-6 rounded-xl border border-purple-500/20">
             <div className="flex items-center justify-between mb-4">
@@ -117,7 +118,7 @@ export default function Dashboard() {
           </div>
 
           {/* My Investments */}
-          <div className="lg:col-span-2 bg-gray-900/50 p-6 rounded-xl border border-purple-500/20">
+          <section className="lg:col-span-2 bg-gray-900/50 p-6 rounded-xl border border-purple-500/20">
             <h2 className="text-white text-xl font-medium mb-4">
               My Investments
             </h2>
@@ -144,47 +145,64 @@ export default function Dashboard() {
                 myInvestments.map((property) => (
                   <div
                     key={property.id}
-                    className="bg-black/40 p-4 rounded-xl flex justify-between items-center"
+                    className="bg-black/40 p-4 rounded-xl flex flex-col sm:flex-row justify-between gap-4"
                   >
                     <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <FaCube className="text-purple-400" />
-                        <p className="text-white font-medium">
-                          {property.name}
-                        </p>
-                      </div>
-                      <div className="mt-2 grid grid-cols-2 gap-4">
+                      <div className="flex flex-wrap items-center gap-2 mb-3">
                         <div className="flex items-center gap-2">
-                          <FaMapMarkerAlt className="text-gray-400" />
-                          <p className="text-gray-400 text-sm">
+                          <FaCube className="text-purple-400" />
+                          <p className="text-white font-medium truncate max-w-[150px]">
+                            {property.name}
+                          </p>
+                        </div>
+                        {property.exitDate && (
+                          <span
+                            className={`text-xs px-2 py-1 rounded-full whitespace-nowrap ${
+                              new Date(property.exitDate) < new Date()
+                                ? "bg-red-500/20 text-red-400"
+                                : "bg-yellow-500/20 text-yellow-400"
+                            }`}
+                          >
+                            {new Date(property.exitDate) < new Date()
+                              ? "Exited"
+                              : `Exit: ${new Date(
+                                  property.exitDate
+                                ).toLocaleDateString()}`}
+                          </span>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="flex items-center gap-2">
+                          <FaMapMarkerAlt className="text-gray-400 min-w-[1rem]" />
+                          <p className="text-gray-400 text-sm truncate">
                             {property.location}
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
-                          <FaCoins className="text-purple-400" />
+                          <FaCoins className="text-purple-400 min-w-[1rem]" />
                           <p className="text-gray-400 text-sm">
                             NFT Units: {property.units}
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
-                          <FaChartLine className="text-green-400" />
+                          <FaChartLine className="text-green-400 min-w-[1rem]" />
                           <p className="text-purple-400 text-sm">
                             Yield: {property.rentalYield}
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
-                          <FaUsers className="text-blue-400" />
+                          <FaUsers className="text-blue-400 min-w-[1rem]" />
                           <p className="text-gray-400 text-sm">
                             Occupancy: {property.occupancyRate}
                           </p>
                         </div>
                       </div>
                     </div>
-                    <div className="text-right ml-4">
+                    <div className="flex sm:flex-col sm:text-right justify-between sm:ml-4">
                       <p className="text-white font-medium">
                         ${property.value.toLocaleString()}
                       </p>
-                      <p className="text-green-400 text-sm flex items-center justify-end gap-1">
+                      <p className="text-green-400 text-sm flex items-center sm:justify-end gap-1">
                         <FaArrowUp />
                         {property.growth}%
                       </p>
@@ -208,7 +226,7 @@ export default function Dashboard() {
                 <FaArrowUp className="rotate-180" />
               </div>
             </div>
-          </div>
+          </section>
         </section>
 
         {/* Available Properties Section */}
@@ -216,16 +234,22 @@ export default function Dashboard() {
           <h2 className="text-white text-xl font-medium mb-4">
             Available Properties
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {assets?.map((asset: any) => (
-              <div key={asset.id} className="bg-black/40 p-4 rounded-xl">
+          <div
+            className="flex overflow-x-auto pb-4 gap-4"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {initAssets.slice(0, 4)?.map((asset: any) => (
+              <div
+                key={asset.id}
+                className="bg-black/40 p-4 rounded-xl min-w-[300px]"
+              >
                 <h3 className="text-white font-medium">{asset.name}</h3>
                 <p className="text-gray-400 text-sm mb-2">{asset.location}</p>
                 <p className="text-white font-bold">
                   ${asset.worth?.toLocaleString()}
                 </p>
                 <p className="text-green-400 text-sm mb-3">
-                  Expected Return: {asset.expectedReturn}%
+                  Available Units: {asset.units}
                 </p>
                 <button
                   onClick={() => {
@@ -240,7 +264,114 @@ export default function Dashboard() {
             ))}
           </div>
         </section>
-        
+        {/* Units For Sale Section */}
+        <section className="mt-10 bg-gray-900/50 p-6 rounded-xl border border-purple-500/20">
+          <h2 className="text-white text-xl font-medium mb-4">
+            Sell Your Units
+          </h2>
+          <div className="bg-black/40 p-4 rounded-xl">
+            <div className="space-y-4">
+              <div>
+                <label className="text-gray-400 block mb-2">
+                  Select Property
+                </label>
+                <select
+                  onChange={(e) => {
+                    const selected = myInvestments.find(
+                      (inv) => inv.id === parseInt(e.target.value)
+                    );
+                    setData({
+                      ...data,
+                      selectedProperty: selected,
+                      unitsToSell: 0,
+                      estimatedPrice: 0,
+                    });
+                  }}
+                  className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg"
+                >
+                  <option value="">Choose a property</option>
+                  {myInvestments.map((investment) => (
+                    <option key={investment.id} value={investment.id}>
+                      {investment.name} ({investment.units} units available)
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {data.selectedProperty && (
+                <>
+                  <div>
+                    <label className="text-gray-400 block mb-2">
+                      Units to Sell
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      max={data.selectedProperty.units}
+                      value={data.unitsToSell || ""}
+                      onChange={(e) => {
+                        const units = Math.min(
+                          parseInt(e.target.value) || 0,
+                          data.selectedProperty.units
+                        );
+                        const price = units * data.selectedProperty.value;
+                        setData({
+                          ...data,
+                          unitsToSell: units,
+                          estimatedPrice: price,
+                        });
+                      }}
+                      className="w-full bg-gray-800 text-white px-3 py-2 rounded-lg"
+                      placeholder="Enter number of units"
+                    />
+                  </div>
+
+                  <div className="bg-gray-800/50 p-4 rounded-lg">
+                    <p className="text-gray-400">Estimated Value:</p>
+                    <p className="text-2xl font-bold text-white">
+                      ${data.estimatedPrice?.toLocaleString() || 0}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => setShowModal({ open: true, action: "sell" })}
+                    disabled={!data.unitsToSell}
+                    className="w-full px-4 py-2 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Sell
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </section>
+        {/* Recent Transactions Section */}
+        <section className="mt-10 bg-gray-900/50 p-6 rounded-xl border border-purple-500/20">
+          <h2 className="text-white text-xl font-medium mb-4">
+            Recent Transactions
+          </h2>
+          <div className="space-y-4">
+            {[1, 2, 3].map((item) => (
+              <div
+                key={item}
+                className="bg-black/40 p-4 rounded-xl flex justify-between items-center"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="bg-purple-500/20 p-2 rounded-lg">
+                    <FaCoins className="text-purple-400" />
+                  </div>
+                  <div>
+                    <p className="text-white font-medium">
+                      Property Investment
+                    </p>
+                    <p className="text-gray-400 text-sm">2024-01-{item}</p>
+                  </div>
+                </div>
+                <p className="text-white font-medium">-$25,000</p>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
 
       {/* Modal for Investment Actions */}

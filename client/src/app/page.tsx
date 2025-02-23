@@ -1,21 +1,10 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  FaWallet,
-  FaChartLine,
-  FaCube,
-  FaLock,
-  FaDiscord,
-  FaTwitter,
-  FaMedium,
-} from "react-icons/fa";
+import { FaWallet, FaChartLine, FaCube, FaLock } from "react-icons/fa";
 import Properties from "./components/Properties";
 
-
 export default function Home() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const router = useRouter();
 
   return (
@@ -150,7 +139,10 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-gray-900/50 p-6 rounded-xl border border-purple-500/20">
               <div className="text-4xl font-bold text-purple-400 mb-4">01</div>
-              <h3 className="text-white text-xl font-medium mb-2" onClick={() => router.push('/dashboard')}>
+              <h3
+                className="text-white text-xl font-medium mb-2"
+                onClick={() => router.push("/dashboard")}
+              >
                 Connect Wallet
               </h3>
               <p className="text-gray-400">
@@ -182,29 +174,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <section className="py-20 bg-black/40">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              Stay Updated
-            </span>
-          </h2>
-          <p className="text-gray-400 mb-8">
-            Get notified about new property listings and platform updates.
-          </p>
-          <div className="flex gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 bg-gray-900/50 border border-purple-500/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
-            />
-            <button className="px-6 py-2 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg text-white hover:opacity-90 transition-opacity">
-              Subscribe
-            </button>
-          </div>
-        </div>
-      </section>
       {/* Testimonials Section */}
       <section className="py-20 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -253,6 +222,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
 
       {/* Partners Section */}
       <section className="py-20 bg-black/40">
@@ -276,33 +246,31 @@ export default function Home() {
           </div>
         </div>
       </section>
-      {/* Footer */}
-      <footer className="border-t border-purple-500/20 bg-black/40 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex justify-between items-center">
-            <div className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              UrbanFraction
-            </div>
-            <div className="flex space-x-6">
-              <a className="text-gray-400 hover:text-purple-400 transition-colors">
-                Privacy
-              </a>
-              <a className="text-gray-400 hover:text-purple-400 transition-colors">
-                Terms
-              </a>
-              <a className="text-gray-400 hover:text-purple-400 transition-colors">
-                FAQ
-              </a>
-            </div>
-            <div className="flex space-x-4">
-              <FaDiscord className="text-gray-400 hover:text-purple-400 text-xl cursor-pointer" />
-              <FaTwitter className="text-gray-400 hover:text-purple-400 text-xl cursor-pointer" />
-              <FaMedium className="text-gray-400 hover:text-purple-400 text-xl cursor-pointer" />
-            </div>
+      {/* Newsletter Section */}
+      <section className="py-20 bg-black/40">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold mb-6">
+            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              Stay Updated
+            </span>
+          </h2>
+          <p className="text-gray-400 mb-8">
+            Get notified about new property listings and platform updates.
+          </p>
+          <div className="flex gap-4 max-w-md mx-auto">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="flex-1 bg-gray-900/50 border border-purple-500/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500"
+            />
+            <button className="px-6 py-2 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg text-white hover:opacity-90 transition-opacity">
+              Subscribe
+            </button>
           </div>
         </div>
-      </footer>
+      </section>
+
+
     </div>
   );
 }
-
