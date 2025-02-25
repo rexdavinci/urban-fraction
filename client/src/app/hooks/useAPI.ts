@@ -33,7 +33,7 @@ const useAPI = () => {
 
 
   const login = useCallback(async (data: { username: string, password: string }) => {
-    const res = await fetch(`${uri}/login`, {
+    const res = await fetch(`/login`, {
       body: JSON.stringify(data),
       method: 'POST'
     })
