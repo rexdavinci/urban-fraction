@@ -71,13 +71,13 @@ export default function Register() {
               onChange={handleChange}
               className="w-full bg-gray-900/50 border border-purple-500/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 pl-10"
               required
-              minLength={3}
+              minLength={1}
             />
             <FaUser className="absolute left-3 top-3.5 text-gray-400" />
           </div>
           <div className="relative">
             <input
-              type="email"
+              type="text"
               name="email"
               placeholder="Email"
               value={formData.email}
@@ -97,7 +97,7 @@ export default function Register() {
               onChange={handleChange}
               className="w-full bg-gray-900/50 border border-purple-500/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-purple-500 pl-10"
               required
-              minLength={8}
+              minLength={1}
             />
             <RiLockPasswordLine className="absolute left-3 top-3.5 text-gray-400" />
             <button

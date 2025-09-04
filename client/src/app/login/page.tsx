@@ -3,13 +3,14 @@ import { useState } from "react";
 import { MdEmail } from "react-icons/md";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { RiLockPasswordLine } from "react-icons/ri";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 // import { useState } from "react";
 // import { useAPI } from "../hooks/useAPI";
-// import { useAssetStore } from "../store";
+import { useAssetStore } from "../store";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const { setAuth, auth } = useAssetStore();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -18,7 +19,7 @@ export default function Login() {
   // const [data, setData] = useState<{ [x: string]: string }>({});
   // const { loginUser } = useAPI();
   // const { auth } = useAssetStore();
-  // const router = useRouter();
+  const router = useRouter();
 
   // const login = async (e: any) => {
   // //   e.preventDefault();
@@ -37,10 +38,21 @@ export default function Login() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Handle signup logic here
-    console.log("Form submitted:", formData);
+    const res = await fetch("/api/auth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...formData, action: "register" }),
+    });
+    const data = await res.json();
+    setAuth(data.data);
+    if(data.success) {
+      router.push('/dashboard')
+    };
   };
 
   return (
@@ -54,7 +66,7 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="relative">
             <input
-              type="email"
+              type="text"
               name="email"
               placeholder="Email"
               value={formData.email}
